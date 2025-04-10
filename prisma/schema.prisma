@@ -97,38 +97,39 @@ model Category {
 }
 
 model Brand {
-  id          String     @id @default(uuid())
-  name        String     @unique
-
-  products    Product[]
-
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @default(now()) @map("updated_at")
+  id        String    @id @default(uuid())
+  name      String    @unique
+  // Дополнительные поля, если нужны:
+  description String?
   
-  @@map("brands")
-}
-
-model Color {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  hex      String?   // Опциональный HEX-код цвета, например, "#000000"
-  
-  // Многие-к-многим: товар может иметь несколько цветов
-  products Product[] @relation("ProductColors")
+  // Отношение с продуктами
+  products  Product[]
   
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @default(now()) @map("updated_at")
 
+  @@map("brands")
+}
+model Color {
+  id       String   @id @default(uuid())
+  name     String   @unique   
+  hex      String?  
+  products Product[] @relation("ProductColors")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  
   @@map("colors")
 }
 
+
 model Product {
   id             String                  @id @default(uuid())
-  title          String                  // Название товара
-  description    String?                 // Описание товара
-  images         String[]                // Массив ссылок на фотографии товара
-  priceTenge     Int                     // Цена в тенге
-  priceTon       Int                     // Цена в другой единице (например, тонна или иная валюта)
+  title          String                  
+  description    String?              
+  images         String[]               
+  priceTenge     Int                     
+  priceTon       Int                     
 
   // Связь с категорией (один товар принадлежит к одной категории)
   categoryId     String?
@@ -138,10 +139,10 @@ model Product {
   brandId        String?
   brand          Brand?                  @relation(fields: [brandId], references: [id])
   
-  // Многие-к-многим: товар может иметь несколько цветов (например, черный и белый)
+  // Многие-к-многим:
   colors         Color[]                 @relation("ProductColors")
 
-  // Гибкий список характеристик
+
   specifications ProductSpecification[]
 
   favorites      Favorite[]

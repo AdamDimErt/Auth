@@ -97,9 +97,12 @@ model Category {
 }
 
 model Brand {
-  id   String @id @default(uuid())
-  name String @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
+  // Дополнительные поля, если нужны:
+  description String?
 
+  // Отношение с продуктами
   products Product[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -109,11 +112,9 @@ model Brand {
 }
 
 model Color {
-  id   String  @id @default(uuid())
-  name String  @unique
-  hex  String? // Опциональный HEX-код цвета, например, "#000000"
-
-  // Многие-к-многим: товар может иметь несколько цветов
+  id       String    @id @default(uuid())
+  name     String    @unique // гарантирует, что имя будет уникальным
+  hex      String?
   products Product[] @relation("ProductColors")
 
   createdAt DateTime @default(now()) @map("created_at")

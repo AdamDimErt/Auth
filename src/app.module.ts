@@ -6,6 +6,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProviderModule } from './auth/provider/provider.module';
+import { ProductModule } from './product/product.module';
+import { BrandModule } from './brand/brand.module';
+import { ColorModule } from './color/color.module';
+import { CategoryModule } from './category/category.module';
+import { CartModule } from './cart/cart.module';
 
 
 @Module({
@@ -14,10 +19,16 @@ import { ProviderModule } from './auth/provider/provider.module';
       ignoreEnvFile:!IS_DEV_ENV,
       isGlobal: true
     }),
+    ProductModule,
     PrismaModule,
     AuthModule,
     UserModule,
-    ProviderModule
+    ProviderModule,
+    ProductModule,
+    BrandModule,
+    ColorModule,
+    CategoryModule,
+    CartModule
   ],
 })
 export class AppModule {}

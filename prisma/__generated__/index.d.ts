@@ -6070,6 +6070,7 @@ export namespace Prisma {
   export type BrandMinAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6077,6 +6078,7 @@ export namespace Prisma {
   export type BrandMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6084,6 +6086,7 @@ export namespace Prisma {
   export type BrandCountAggregateOutputType = {
     id: number
     name: number
+    description: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6093,6 +6096,7 @@ export namespace Prisma {
   export type BrandMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6100,6 +6104,7 @@ export namespace Prisma {
   export type BrandMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6107,6 +6112,7 @@ export namespace Prisma {
   export type BrandCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6187,6 +6193,7 @@ export namespace Prisma {
   export type BrandGroupByOutputType = {
     id: string
     name: string
+    description: string | null
     createdAt: Date
     updatedAt: Date
     _count: BrandCountAggregateOutputType | null
@@ -6211,6 +6218,7 @@ export namespace Prisma {
   export type BrandSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     products?: boolean | Brand$productsArgs<ExtArgs>
@@ -6220,6 +6228,7 @@ export namespace Prisma {
   export type BrandSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["brand"]>
@@ -6227,6 +6236,7 @@ export namespace Prisma {
   export type BrandSelectScalar = {
     id?: boolean
     name?: boolean
+    description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -6245,6 +6255,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      description: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["brand"]>
@@ -6669,6 +6680,7 @@ export namespace Prisma {
   interface BrandFieldRefs {
     readonly id: FieldRef<"Brand", 'String'>
     readonly name: FieldRef<"Brand", 'String'>
+    readonly description: FieldRef<"Brand", 'String'>
     readonly createdAt: FieldRef<"Brand", 'DateTime'>
     readonly updatedAt: FieldRef<"Brand", 'DateTime'>
   }
@@ -13182,6 +13194,7 @@ export namespace Prisma {
   export const BrandScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13680,6 +13693,7 @@ export namespace Prisma {
     NOT?: BrandWhereInput | BrandWhereInput[]
     id?: StringFilter<"Brand"> | string
     name?: StringFilter<"Brand"> | string
+    description?: StringNullableFilter<"Brand"> | string | null
     createdAt?: DateTimeFilter<"Brand"> | Date | string
     updatedAt?: DateTimeFilter<"Brand"> | Date | string
     products?: ProductListRelationFilter
@@ -13688,6 +13702,7 @@ export namespace Prisma {
   export type BrandOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     products?: ProductOrderByRelationAggregateInput
@@ -13699,6 +13714,7 @@ export namespace Prisma {
     AND?: BrandWhereInput | BrandWhereInput[]
     OR?: BrandWhereInput[]
     NOT?: BrandWhereInput | BrandWhereInput[]
+    description?: StringNullableFilter<"Brand"> | string | null
     createdAt?: DateTimeFilter<"Brand"> | Date | string
     updatedAt?: DateTimeFilter<"Brand"> | Date | string
     products?: ProductListRelationFilter
@@ -13707,6 +13723,7 @@ export namespace Prisma {
   export type BrandOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BrandCountOrderByAggregateInput
@@ -13720,6 +13737,7 @@ export namespace Prisma {
     NOT?: BrandScalarWhereWithAggregatesInput | BrandScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Brand"> | string
     name?: StringWithAggregatesFilter<"Brand"> | string
+    description?: StringNullableWithAggregatesFilter<"Brand"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Brand"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Brand"> | Date | string
   }
@@ -14417,6 +14435,7 @@ export namespace Prisma {
   export type BrandCreateInput = {
     id?: string
     name: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     products?: ProductCreateNestedManyWithoutBrandInput
@@ -14425,6 +14444,7 @@ export namespace Prisma {
   export type BrandUncheckedCreateInput = {
     id?: string
     name: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutBrandInput
@@ -14433,6 +14453,7 @@ export namespace Prisma {
   export type BrandUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutBrandNestedInput
@@ -14441,6 +14462,7 @@ export namespace Prisma {
   export type BrandUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutBrandNestedInput
@@ -14449,6 +14471,7 @@ export namespace Prisma {
   export type BrandCreateManyInput = {
     id?: string
     name: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14456,6 +14479,7 @@ export namespace Prisma {
   export type BrandUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14463,6 +14487,7 @@ export namespace Prisma {
   export type BrandUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15208,6 +15233,7 @@ export namespace Prisma {
   export type BrandCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15215,6 +15241,7 @@ export namespace Prisma {
   export type BrandMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15222,6 +15249,7 @@ export namespace Prisma {
   export type BrandMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16808,6 +16836,7 @@ export namespace Prisma {
   export type BrandCreateWithoutProductsInput = {
     id?: string
     name: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16815,6 +16844,7 @@ export namespace Prisma {
   export type BrandUncheckedCreateWithoutProductsInput = {
     id?: string
     name: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17036,6 +17066,7 @@ export namespace Prisma {
   export type BrandUpdateWithoutProductsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17043,6 +17074,7 @@ export namespace Prisma {
   export type BrandUncheckedUpdateWithoutProductsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
