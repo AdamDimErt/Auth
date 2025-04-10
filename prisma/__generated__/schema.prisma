@@ -1,3 +1,4 @@
+// Конфигурация генератора и подключения к базе данных
 generator client {
   provider = "prisma-client-js"
   output   = "./__generated__"
@@ -8,24 +9,24 @@ datasource db {
   url      = env("POSTGRES_URI")
 }
 
+// ========================
+// Модели для аутентификации
+// ========================
+
 model User {
-  id String @id @default(uuid())
+  id                 String     @id @default(uuid())
+  email              String     @unique
+  password           String
+  displayName        String
+  picture            String?
+  role               UserRole   @default(REGULAR)
+  isVerified         Boolean    @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean    @default(false) @map("is_two_factor_enabled")
+  method             AuthMethod
 
-  email    String @unique
-  password String
-
-  displayName String
-  picture     String?
-
-  role UserRole @default(REGULAR)
-
-  isVerified         Boolean @default(false) @map("is_verified")
-  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
-
-  method AuthMethod
-
-  // свзяь с Accounts
-  accounts Account[]
+  accounts  Account[]
+  favorites Favorite[]
+  cart      Cart? // Один пользователь – одна корзина
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
@@ -34,30 +35,27 @@ model User {
 }
 
 model Account {
-  id String @id @default(uuid())
+  id           String   @id @default(uuid())
+  type         String
+  provider     String
+  refreshToken String?  @map("refresh_token")
+  accessToken  String?  @map("access_token")
+  expiresAt    Int      @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
 
-  type     String
-  provider String
-
-  refreshToken String? @map("refresh_token")
-  accessToken  String? @map("access_token")
-  expiresAt    Int     @map("expires_at")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @default(now()) @map("updated_at")
-  user      User?    @relation(fields: [userId], references: [id])
-  userId    String?  @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
 
   @@map("account")
 }
 
 model Token {
-  id String @id @default(uuid())
-
-  email String
-  token String @unique
-
+  id        String    @id @default(uuid())
+  email     String
+  token     String    @unique
   type      TokenType
+  createdAt DateTime  @default(now()) @map("created_at")
   expiresIn DateTime  @map("expires_in")
 
   @@map("tokens")
@@ -78,4 +76,145 @@ enum TokenType {
   VERIFICATION
   TWO_FACTOR
   PASSWORD_RESET
+}
+
+// ========================
+// Модели для каталога товаров и фильтрации
+// ========================
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  // Один-к-многим: одна категория – много товаров
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("categories")
+}
+
+model Brand {
+  id   String @id @default(uuid())
+  name String @unique
+
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("brands")
+}
+
+model Color {
+  id   String  @id @default(uuid())
+  name String  @unique
+  hex  String? // Опциональный HEX-код цвета, например, "#000000"
+
+  // Многие-к-многим: товар может иметь несколько цветов
+  products Product[] @relation("ProductColors")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("colors")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  title       String // Название товара
+  description String? // Описание товара
+  images      String[] // Массив ссылок на фотографии товара
+  priceTenge  Int // Цена в тенге
+  priceTon    Int // Цена в другой единице (например, тонна или иная валюта)
+
+  // Связь с категорией (один товар принадлежит к одной категории)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  // Связь с брендом (один товар – один бренд)
+  brandId String?
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  // Многие-к-многим: товар может иметь несколько цветов (например, черный и белый)
+  colors Color[] @relation("ProductColors")
+
+  // Гибкий список характеристик
+  specifications ProductSpecification[]
+
+  favorites Favorite[]
+
+  // Самореференция для вариантов товара (например, разные цвета одного продукта)
+  similarProducts Product[] @relation("SimilarProducts")
+  similarTo       Product[] @relation("SimilarProducts")
+
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @map("updated_at")
+  CartItem  CartItem[]
+
+  @@map("products")
+}
+
+model ProductSpecification {
+  id    String @id @default(uuid())
+  name  String // Название характеристики (например, "Размер экрана")
+  value String // Значение (например, "15 дюймов")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("product_specifications")
+}
+
+model Favorite {
+  id String @id @default(uuid())
+
+  // Пользователь, добавивший товар в избранное
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  // Товар, добавленный в избранное
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("favorites")
+}
+
+// ========================
+// Модели для корзины товаров
+// ========================
+
+model Cart {
+  id     String @id @default(uuid())
+  // Один к одному: каждый пользователь имеет одну корзину
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  items CartItem[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("carts")
+}
+
+model CartItem {
+  id String @id @default(uuid())
+
+  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String @map("cart_id")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  // Количество добавленного товара
+  quantity Int @default(1)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("cart_items")
 }
